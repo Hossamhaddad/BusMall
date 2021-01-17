@@ -1,0 +1,78 @@
+@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lobster&family=Special+Elite&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Gruppo&family=Lobster&family=Special+Elite&display=swap');
+
+header{
+    height: 80px;
+}
+body{
+    background-image: url(/img/black_texture_texture_background_06_hd_pictures_169901.jpg);
+}
+#headerLogo{
+    display: inline-block;
+    position: relative;
+    margin-top: 10px;
+
+}
+#headerWords{
+    display: inline-block;
+    position: absolute;
+    margin-left: 10px;
+    margin-top: 5px;
+    color: whitesmoke;
+    font-family: 'Lobster', cursive;
+}
+#mainpara{
+    text-align: center;
+    margin-top: 150px;
+    color: whitesmoke;
+
+}
+#leftImage{
+    display: inline-block;
+    height: 310px;
+    width: 310px;
+    margin-left: 170px;
+
+}
+#midImage{
+    display: inline-block;
+    height: 310px;
+    width: 310px;
+    margin-left: 10px;
+}
+#rightImage{
+    display: inline-block;
+    height: 310px;
+    width: 310px;
+    margin-left: 10px;
+}
+#lastPara{
+    color: whitesmoke;
+    text-align: center;
+}
+footer{
+    color: whitesmoke;
+    text-align: center;
+    margin-top: 60px;
+}
+button{
+  margin-left: 45%; 
+  height: 40px;
+  color: whitesmoke;
+  background-color: rgba(128, 128, 128, 0.63);
+  font-family: 'Special Elite', cursive;
+
+}
+li{
+    color: whitesmoke;
+}
+button:hover{
+    background-color: red;
+}
+main h2{
+    font-family: 'Special Elite', cursive;
+}
+p {
+    font-family: 'Special Elite', cursive;
+}
