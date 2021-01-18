@@ -93,3 +93,10 @@ function clickFunction(){
   var click=document.getElementById('results');
   click.style.display='block';
 }
+var numOfVotes=document.getElementById('rounds-form');
+numOfVotes.addEventListener('submit',submitter);
+function submitter(event){
+  event.preventDefault();
+  maxAttempts=event.target.votes.value;
+}
+
