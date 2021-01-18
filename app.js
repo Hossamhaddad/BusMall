@@ -7,12 +7,17 @@ var midImageElement=document.getElementById('midImage');
 var rightImageElement=document.getElementById('rightImage');
 var maxAttempts=25;
 var attemptsCounter=0;
+var productName=[];
+var productRender=[];
+var productVote=[];
+var imagesArr=[];
 function ProductImage(name,source){
   this.name=name;
   this.source=source;
   this.votes=0;
   this.render=0;
   ProductImage.prototype.allProducts.push(this);
+  productName.push(this.name);
 }
 
 ProductImage.prototype.allProducts=[];
@@ -40,10 +45,12 @@ new ProductImage('wine-glass','img/wine-glass.jpg');
 function randomindex(){
   return Math.floor(Math.random() * (ProductImage.prototype.allProducts.length));
 }
+console.log(imagesArr);
 
 function renderThreeRandomImages(){
-  leftImageIndex=randomindex();
+
   do{
+    leftImageIndex=randomindex();
     rightImageIndex=randomindex();
     midImageIndex=randomindex();
   }while(leftImageIndex=== rightImageIndex || leftImageIndex === midImageIndex || rightImageIndex=== midImageIndex);
@@ -53,9 +60,10 @@ function renderThreeRandomImages(){
   ProductImage.prototype.allProducts[leftImageIndex].render++;
   ProductImage.prototype.allProducts[midImageIndex].render++;
   ProductImage.prototype.allProducts[rightImageIndex].render++;
+  var index=[leftImageIndex,rightImageIndex,midImageIndex];
+  imagesArr.push(index);
 }
 renderThreeRandomImages();
-console.log(ProductImage.prototype.allProducts);
 
 leftImageElement.addEventListener('click',userClick);
 midImageElement.addEventListener('click',userClick);
@@ -78,6 +86,8 @@ function userClick(event){
     var percentage;
     for(var i=0;i<ProductImage.prototype.allProducts.length;i++){
       percentage=ProductImage.prototype.allProducts[i].votes/ProductImage.prototype.allProducts[i].render*100;
+      productRender.push(ProductImage.prototype.allProducts[i].render);
+      productVote.push(ProductImage.prototype.allProducts[i].votes);
       if(!isNaN(percentage)){
         productsResults=document.createElement('li');
         productsResults.textContent=ProductImage.prototype.allProducts[i].name+ ' had '+ProductImage.prototype.allProducts[i].votes+ ' votes, and was seen '+ProductImage.prototype.allProducts[i].render+' times. Percentage = '+parseInt(percentage)+' % ';
@@ -89,6 +99,7 @@ function userClick(event){
     rightImageElement.removeEventListener('click',userClick);
   }
 }
+
 function clickFunction(){
   var click=document.getElementById('results');
   click.style.display='block';
@@ -99,4 +110,24 @@ function submitter(event){
   event.preventDefault();
   maxAttempts=event.target.votes.value;
 }
+
+var ctx = document.getElementById('myChart').getContext('2d');
+var chart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: productName,
+    datasets: [{
+      label: 'Render',
+      backgroundColor: 'rgb(255, 99, 132)',
+      borderColor: 'rgb(255, 99, 132)',
+      data: productRender,}, 
+    {
+      label: 'Votes',
+      backgroundColor: 'rgb(250, 99, 132)',
+      borderColor: 'rgb(255, 99, 132)',
+      data: productVote,
+    }]
+  },
+  options: {}
+});
 
