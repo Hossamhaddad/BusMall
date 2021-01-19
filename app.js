@@ -10,7 +10,9 @@ var attemptsCounter=0;
 var productName=[];
 var productRender=[];
 var productVote=[];
-var imagesArr=[];
+var lastLeftIndex=-1;
+var lastMidIndex=-1;
+var lastRightIndex=-1;
 function ProductImage(name,source){
   this.name=name;
   this.source=source;
@@ -45,26 +47,32 @@ new ProductImage('wine-glass','img/wine-glass.jpg');
 function randomindex(){
   return Math.floor(Math.random() * (ProductImage.prototype.allProducts.length));
 }
-console.log(imagesArr);
-
 function renderThreeRandomImages(){
-
+  var previousindex=[lastLeftIndex,lastMidIndex,lastRightIndex];;
   do{
     leftImageIndex=randomindex();
-    rightImageIndex=randomindex();
+  }while(previousindex.includes(leftImageIndex));
+  lastLeftIndex=leftImageIndex;
+  previousindex.push(leftImageIndex);
+ do {
+  rightImageIndex=randomindex();
+  }while(previousindex.includes(rightImageIndex));
+  lastRightIndex=rightImageIndex;
+  previousindex.push(rightImageIndex);
+  do {
     midImageIndex=randomindex();
-  }while(leftImageIndex=== rightImageIndex || leftImageIndex === midImageIndex || rightImageIndex=== midImageIndex);
+  }while(previousindex.includes(midImageIndex));
+  lastMidIndex=midImageIndex;
+  previousindex.push(midImageIndex);
+
   leftImageElement.src= ProductImage.prototype.allProducts[leftImageIndex].source;
   midImageElement.src= ProductImage.prototype.allProducts[midImageIndex].source;
   rightImageElement.src= ProductImage.prototype.allProducts[rightImageIndex].source;
   ProductImage.prototype.allProducts[leftImageIndex].render++;
   ProductImage.prototype.allProducts[midImageIndex].render++;
   ProductImage.prototype.allProducts[rightImageIndex].render++;
-  var index=[leftImageIndex,rightImageIndex,midImageIndex];
-  imagesArr.push(index);
 }
 renderThreeRandomImages();
-
 leftImageElement.addEventListener('click',userClick);
 midImageElement.addEventListener('click',userClick);
 rightImageElement.addEventListener('click',userClick);
@@ -97,6 +105,7 @@ function userClick(event){
     leftImageElement.removeEventListener('click',userClick);
     midImageElement.removeEventListener('click',userClick);
     rightImageElement.removeEventListener('click',userClick);
+    chart();
   }
 }
 
@@ -111,6 +120,9 @@ function submitter(event){
   maxAttempts=event.target.votes.value;
 }
 
+
+
+function chart (){
 var ctx = document.getElementById('myChart').getContext('2d');
 var chart = new Chart(ctx, {
   type: 'bar',
@@ -118,16 +130,17 @@ var chart = new Chart(ctx, {
     labels: productName,
     datasets: [{
       label: 'Render',
-      backgroundColor: 'rgb(255, 99, 132)',
+      backgroundColor: 'crimson',
       borderColor: 'rgb(255, 99, 132)',
       data: productRender,}, 
     {
       label: 'Votes',
-      backgroundColor: 'rgb(250, 99, 132)',
+      backgroundColor: 'red',
       borderColor: 'rgb(255, 99, 132)',
       data: productVote,
     }]
   },
-  options: {}
+  options: {
+  }
 });
-
+}
