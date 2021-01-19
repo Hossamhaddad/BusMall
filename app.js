@@ -13,6 +13,9 @@ var productVote=[];
 var lastLeftIndex=-1;
 var lastMidIndex=-1;
 var lastRightIndex=-1;
+var votesNum=[];
+// var clicks=[];
+
 function ProductImage(name,source){
   this.name=name;
   this.source=source;
@@ -54,8 +57,8 @@ function renderThreeRandomImages(){
   }while(previousindex.includes(leftImageIndex));
   lastLeftIndex=leftImageIndex;
   previousindex.push(leftImageIndex);
- do {
-  rightImageIndex=randomindex();
+  do {
+    rightImageIndex=randomindex();
   }while(previousindex.includes(rightImageIndex));
   lastRightIndex=rightImageIndex;
   previousindex.push(rightImageIndex);
@@ -79,6 +82,7 @@ rightImageElement.addEventListener('click',userClick);
 
 function userClick(event){
   attemptsCounter++;
+
   if(attemptsCounter<=maxAttempts){
     if(event.target.id === 'leftImage'){
       ProductImage.prototype.allProducts[leftImageIndex].votes++;
@@ -88,6 +92,8 @@ function userClick(event){
       ProductImage.prototype.allProducts[rightImageIndex].votes++;
     }
     renderThreeRandomImages();
+    votesNum.push('attemptsCounter');
+    JSON.parse(localStorage.getItem(jsvotes));
   }else{
     var results=document.getElementById('results');
     var productsResults;
@@ -119,9 +125,6 @@ function submitter(event){
   event.preventDefault();
   maxAttempts=event.target.votes.value;
 }
-
-
-
 function chart (){
 var ctx = document.getElementById('myChart').getContext('2d');
 var chart = new Chart(ctx, {
@@ -132,7 +135,7 @@ var chart = new Chart(ctx, {
       label: 'Render',
       backgroundColor: 'crimson',
       borderColor: 'rgb(255, 99, 132)',
-      data: productRender,}, 
+      data: productRender,},
     {
       label: 'Votes',
       backgroundColor: 'red',
@@ -141,6 +144,10 @@ var chart = new Chart(ctx, {
     }]
   },
   options: {
-  }
-});
 }
+  });
+}
+var jsvotes=JSON.stringify(votesNum);
+localStorage.setItem('votes',jsvotes);
+localStorage.getItem('votes');
+
