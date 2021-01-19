@@ -7,12 +7,19 @@ var midImageElement=document.getElementById('midImage');
 var rightImageElement=document.getElementById('rightImage');
 var maxAttempts=25;
 var attemptsCounter=0;
+var productName=[];
+var productRender=[];
+var productVote=[];
+var lastLeftIndex=-1;
+var lastMidIndex=-1;
+var lastRightIndex=-1;
 function ProductImage(name,source){
   this.name=name;
   this.source=source;
   this.votes=0;
   this.render=0;
   ProductImage.prototype.allProducts.push(this);
+  productName.push(this.name);
 }
 
 ProductImage.prototype.allProducts=[];
@@ -40,13 +47,24 @@ new ProductImage('wine-glass','img/wine-glass.jpg');
 function randomindex(){
   return Math.floor(Math.random() * (ProductImage.prototype.allProducts.length));
 }
-
 function renderThreeRandomImages(){
-  leftImageIndex=randomindex();
+  var previousindex=[lastLeftIndex,lastMidIndex,lastRightIndex];;
   do{
-    rightImageIndex=randomindex();
+    leftImageIndex=randomindex();
+  }while(previousindex.includes(leftImageIndex));
+  lastLeftIndex=leftImageIndex;
+  previousindex.push(leftImageIndex);
+ do {
+  rightImageIndex=randomindex();
+  }while(previousindex.includes(rightImageIndex));
+  lastRightIndex=rightImageIndex;
+  previousindex.push(rightImageIndex);
+  do {
     midImageIndex=randomindex();
-  }while(leftImageIndex=== rightImageIndex || leftImageIndex === midImageIndex || rightImageIndex=== midImageIndex);
+  }while(previousindex.includes(midImageIndex));
+  lastMidIndex=midImageIndex;
+  previousindex.push(midImageIndex);
+
   leftImageElement.src= ProductImage.prototype.allProducts[leftImageIndex].source;
   midImageElement.src= ProductImage.prototype.allProducts[midImageIndex].source;
   rightImageElement.src= ProductImage.prototype.allProducts[rightImageIndex].source;
@@ -55,8 +73,6 @@ function renderThreeRandomImages(){
   ProductImage.prototype.allProducts[rightImageIndex].render++;
 }
 renderThreeRandomImages();
-console.log(ProductImage.prototype.allProducts);
-
 leftImageElement.addEventListener('click',userClick);
 midImageElement.addEventListener('click',userClick);
 rightImageElement.addEventListener('click',userClick);
@@ -78,6 +94,8 @@ function userClick(event){
     var percentage;
     for(var i=0;i<ProductImage.prototype.allProducts.length;i++){
       percentage=ProductImage.prototype.allProducts[i].votes/ProductImage.prototype.allProducts[i].render*100;
+      productRender.push(ProductImage.prototype.allProducts[i].render);
+      productVote.push(ProductImage.prototype.allProducts[i].votes);
       if(!isNaN(percentage)){
         productsResults=document.createElement('li');
         productsResults.textContent=ProductImage.prototype.allProducts[i].name+ ' had '+ProductImage.prototype.allProducts[i].votes+ ' votes, and was seen '+ProductImage.prototype.allProducts[i].render+' times. Percentage = '+parseInt(percentage)+' % ';
@@ -87,8 +105,10 @@ function userClick(event){
     leftImageElement.removeEventListener('click',userClick);
     midImageElement.removeEventListener('click',userClick);
     rightImageElement.removeEventListener('click',userClick);
+    chart();
   }
 }
+
 function clickFunction(){
   var click=document.getElementById('results');
   click.style.display='block';
@@ -100,3 +120,27 @@ function submitter(event){
   maxAttempts=event.target.votes.value;
 }
 
+
+
+function chart (){
+var ctx = document.getElementById('myChart').getContext('2d');
+var chart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: productName,
+    datasets: [{
+      label: 'Render',
+      backgroundColor: 'crimson',
+      borderColor: 'rgb(255, 99, 132)',
+      data: productRender,}, 
+    {
+      label: 'Votes',
+      backgroundColor: 'red',
+      borderColor: 'rgb(255, 99, 132)',
+      data: productVote,
+    }]
+  },
+  options: {
+  }
+});
+}
