@@ -13,8 +13,7 @@ var productVote=[];
 var lastLeftIndex=-1;
 var lastMidIndex=-1;
 var lastRightIndex=-1;
-var votesNum=[];
-// var clicks=[];
+var votesCounter;
 
 function ProductImage(name,source){
   this.name=name;
@@ -82,6 +81,7 @@ rightImageElement.addEventListener('click',userClick);
 
 function userClick(event){
   attemptsCounter++;
+  votesCounter=attemptsCounter;
 
   if(attemptsCounter<=maxAttempts){
     if(event.target.id === 'leftImage'){
@@ -92,8 +92,6 @@ function userClick(event){
       ProductImage.prototype.allProducts[rightImageIndex].votes++;
     }
     renderThreeRandomImages();
-    votesNum.push('attemptsCounter');
-    JSON.parse(localStorage.getItem(jsvotes));
   }else{
     var results=document.getElementById('results');
     var productsResults;
@@ -141,13 +139,24 @@ var chart = new Chart(ctx, {
       backgroundColor: 'red',
       borderColor: 'rgb(255, 99, 132)',
       data: productVote,
-    }]
-  },
-  options: {
+}]
+},
+    options: {
 }
   });
 }
-var jsvotes=JSON.stringify(votesNum);
-localStorage.setItem('votes',jsvotes);
-localStorage.getItem('votes');
-
+// var localCounter=JSON.stringify(votesCounter);
+//   localStorage.setItem('votes', localCounter);
+//   // if (localStorage.votes===undefined||localStorage.votes=== null||localStorage.votes>25){
+  //   localStorage.setItem('votes',0);
+  // }
+// if(localStorage.getItem('votes') ===undefined||localStorage.getItem('votes')===''){
+//   localStorage.setItem('votes',[0]);
+// }else {
+//   localStorage.getItem('votes');
+// }
+var localvotes=toString(votesCounter);
+localStorage.setItem('votes',localvotes);
+if(localStorage.getItem('votes')===undefined||localStorage.getItem('votes')===''){
+  localStorage.setItem('votes',JSON.srtingfy(0));
+}
